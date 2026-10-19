@@ -1,0 +1,106 @@
+<template>
+
+    <h5 lwc:if={isProductsEmpty} class="slds-text-heading_large slds-text-align_center">
+        {label.noProducts}
+    </h5>
+
+    <div lwc:else>
+        
+        <h2 class="slds-text-heading_large">
+            {contactPoints}
+        </h2>
+
+        <lightning-layout class="slds-m-top_small">
+
+            <lightning-layout-item flexibility="grow">
+                <lightning-input type="search" variant="label-hidden" value={searchInput} onchange={handleChange}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item>
+                <lightning-button-icon 
+                    icon-name="utility:sort" 
+                    onclick={handleSort} 
+                    size="large"
+                    variant="border-filled"
+                    class="slds-m-horizontal_small">
+                </lightning-button-icon>
+            </lightning-layout-item>
+
+        </lightning-layout>
+
+    </div>
+
+    <div class="slds-grid slds-wrap slds-gutters_large">
+
+        <template for:each={pagedProducts} for:item="product">
+
+            <div key={product.Id} class="slds-col slds-medium-size_1-of-3 slds-m-bottom_xx-small">
+
+                <lightning-card class="slds-text-align_center slds-p-around_medium">
+
+                    <h2 class="slds-text-heading_large">
+                        {product.Name}
+                    </h2>
+
+                    <div class="slds-align_absolute-center slds-m-vertical_small">
+                        <img src={product.imageURL} style="width: 200px; height: 200px; object-fit: contain; display: block;"></img>
+                    </div>
+
+                    <lightning-formatted-number 
+                        lwc:if={isMainProduct} format-style="currency" 
+                        class="slds-text-heading_large slds-m-top_medium slds-text-color_success"
+                        value={product.Price_Currency__c}>
+                    </lightning-formatted-number>
+
+                    <h2 lwc:else class="slds-text-heading_large slds-text-color_success">
+                        {product.Price_Points__c} {label.points}
+                    </h2>
+
+                    <div class="slds-m-top_medium">
+                        <lightning-button variant="brand"
+                                          data-id={product.Id}
+                                          data-name={product.Name}
+                                          onclick={handleAdd} 
+                                          label={label.add} 
+                                          icon-name="utility:cart">
+                        </lightning-button>
+                    </div>
+
+                </lightning-card>
+
+            </div>
+        </template>
+
+    </div>
+
+    <template lwc:if={isPaginated}>
+
+        <div class="slds-align_absolute-center slds-m-vertical_medium">
+
+            <lightning-button-icon 
+                icon-name="utility:chevronleft" 
+                onclick={handlePrevious} 
+                disabled={isFirstPage}
+                size="large"
+                variant="border-filled"
+                class="slds-m-horizontal_small">
+            </lightning-button-icon>
+
+            <p>
+                {currentPage} {label.of} {totalPages}
+            </p>
+
+            <lightning-button-icon 
+                icon-name="utility:chevronright" 
+                onclick={handleNext} 
+                disabled={isLastPage}
+                size="large"
+                variant="border-filled"
+                class="slds-m-horizontal_small">
+            </lightning-button-icon>
+            
+        </div>
+
+    </template>
+
+</template>

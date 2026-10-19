@@ -1,0 +1,155 @@
+<template>
+
+    <h2 lwc:if={isCartNotEmpty} class="slds-text-heading_large slds-m-around_medium">
+        {contactPoints}
+    </h2>
+
+    <template for:each={cartItems} for:item="item">
+
+        <div key={item.productName} class="slds-box slds-text-align_center slds-m-around_medium slds-p-around_none">
+
+            <lightning-layout horizontal-align="stretch" vertical-align="stretch">
+
+                <lightning-layout-item size="2" class="button-trigger">
+
+                    <button class="slds-button decrease-dummy">
+                        -
+                    </button>
+
+                    <button 
+                        onclick={handleChange} data-operation="decrease" data-name={item.productName}
+                        class="slds-button slds-button_destructive decrease-button">
+                        -
+                    </button>
+                </lightning-layout-item>
+
+
+                <lightning-layout-item size="8" class="slds-p-around_medium" > 
+
+                    <h2 class="slds-text-heading_large">
+                        {item.productName}
+                    </h2>
+
+                    <div class="slds-align_absolute-center slds-m-vertical_small">
+                        <img src={item.imageURL} style="width: 200px; height: 200px; object-fit: contain; display: block;"></img>
+                    </div>
+
+                    <lightning-layout vertical-align="center" horizontal-align="center">
+
+                        <lightning-layout-item>
+                            <h2 class="slds-text-heading_large">{label.price}&nbsp;</h2>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item>
+                            
+                            <lightning-formatted-number 
+                                lwc:if={item.isMain} format-style="currency" 
+                                class="slds-text-heading_large slds-m-top_medium slds-text-color_success"
+                                value={item.price}>
+                            </lightning-formatted-number>
+
+                            <h2 lwc:else class="slds-text-heading_large slds-text-color_success">
+                                {item.price} {label.points}
+                            </h2>
+
+                        </lightning-layout-item>
+
+                    </lightning-layout>
+
+                    <h2 class="slds-text-heading_large">
+                        {label.quantity} {item.quantity}
+                    </h2>
+
+                    <lightning-layout vertical-align="center" horizontal-align="center">
+
+                        <lightning-layout-item>
+                            <h2 class="slds-text-heading_large">{label.total}&nbsp;</h2>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item>
+                            
+                            <lightning-formatted-number 
+                                lwc:if={item.isMain} format-style="currency" 
+                                class="slds-text-heading_large slds-m-top_medium slds-text-color_success"
+                                value={item.totalPrice}>
+                            </lightning-formatted-number>
+
+                            <h2 lwc:else class="slds-text-heading_large slds-text-color_success">
+                                {item.totalPrice} {label.points}
+                            </h2>
+
+                        </lightning-layout-item>
+
+                    </lightning-layout>
+
+                </lightning-layout-item>
+
+
+                <lightning-layout-item size="2" class="button-trigger">
+
+                    <button class="slds-button increase-dummy">
+                        +
+                    </button>
+
+                    <button 
+                        onclick={handleChange} data-operation="increase" data-name={item.productName}
+                        class="slds-button slds-button_success increase-button">
+                        +
+                    </button>
+
+                </lightning-layout-item>
+
+            </lightning-layout>
+
+        </div>
+
+    </template>
+
+    <lightning-layout lwc:if={isCartNotEmpty} class="slds-m-around_medium">
+
+        <lightning-layout-item>
+            <h2 class="slds-text-heading_large">{label.cartTotal}&nbsp;</h2>
+        </lightning-layout-item>
+
+        <lightning-layout-item>
+            
+            <lightning-formatted-number 
+                format-style="currency" 
+                class="slds-text-heading_large"
+                value={totalCurrency}>
+            </lightning-formatted-number>
+
+        </lightning-layout-item>
+
+        <lightning-layout-item>
+            <h2 class="slds-text-heading_large">
+                , {totalPoints} {label.points}
+            </h2>
+        </lightning-layout-item>
+
+    </lightning-layout>
+
+    <div lwc:if={isCartNotEmpty} class="slds-m-around_medium">
+
+        <div class="slds-m-vertical_medium">
+            <lightning-button  variant="destructive" 
+                               onclick={handleClear} label={label.clear}
+                               icon-name="utility:clear" stretch>
+            </lightning-button>
+        </div>
+
+
+        <div class="slds-m-vertical_medium">
+            <lightning-button  variant="success" 
+                               onclick={handlePurchase} label={label.purchase}
+                               icon-name="utility:checkout" stretch>
+            </lightning-button>
+        </div>
+
+    </div>
+
+    <h5 lwc:else class="slds-text-heading_large slds-text-align_center">
+        {label.empty}
+    </h5>
+
+</template>

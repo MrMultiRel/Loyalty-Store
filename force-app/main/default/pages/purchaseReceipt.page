@@ -1,0 +1,24 @@
+<apex:page title="{!$Label.CurrencyPurchase}" renderAs="pdf" showHeader="false" controller="PDFReceiptController">
+
+<h1>{!$Label.ShoppingThank}</h1>
+<h1>{!$Label.BoughtProducts}</h1>
+
+<ul>
+    <apex:repeat value="{!childOrders}" var="order">
+        <li>
+            <apex:outputText value="{!order.Bought_Loyalty_Product__r.Loyalty_Product__r.Name}"/>
+            <br/>
+            <apex:outputText value="{!$Label.Price} "/>
+            <apex:outputText value="{!order.Bought_Loyalty_Product__r.Loyalty_Product__r.Price_Currency__c}"/>
+            <br/><br/>
+        </li>
+    </apex:repeat>
+</ul>
+
+<apex:outputText value="{!$Label.TotalPrice}: "/>
+<apex:outputText value="{!total}"/>
+<br/>
+<apex:outputText value="{!$Label.PointsGained}: "/>
+<apex:outputText value="{!pointsGained}"/>
+
+</apex:page>

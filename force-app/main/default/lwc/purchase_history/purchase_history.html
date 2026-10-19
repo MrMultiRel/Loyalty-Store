@@ -1,0 +1,104 @@
+<template>
+
+    <div class="slds-m-vertical_medium">
+        <lightning-button  variant="success" disabled={isSending} 
+                           onclick={handleSendOrder} label={label.send} 
+                           icon-name="utility:email" stretch>
+        </lightning-button>
+    </div>
+
+    <lightning-accordion allow-multiple-sections-open>
+
+        <template for:each={pagedOrders} for:item="order">
+
+            <lightning-accordion-section  
+                key={order.id}
+                label={order.purchaseDate}
+                class="slds-m-around_medium">
+
+                <template for:each={order.items} for:item="item">
+
+                    <div key={order.id} class="slds-box slds-text-align_center slds-m-around_medium slds-p-around_medium">
+
+                        <lightning-layout horizontal-align="center" vertical-align="stretch" >
+
+                            <lightning-layout-item size="12" class="slds-text-align_center"> 
+
+                                <h2 class="slds-text-heading_large">
+                                    {item.productName}
+                                </h2>
+
+                            </lightning-layout-item>
+
+                        </lightning-layout>
+
+                    </div>
+
+                </template>
+                
+
+                <lightning-layout horizontal-align="center" class="slds-m-around_medium">
+
+                    <lightning-layout-item>
+                        <h2 class="slds-text-heading_large">{label.total}&nbsp;</h2>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item>
+                        
+                        <lightning-formatted-number 
+                            format-style="currency" 
+                            class="slds-text-heading_large"
+                            value={order.totalCurrency}>
+                        </lightning-formatted-number>
+
+                    </lightning-layout-item>
+
+                    <lightning-layout-item>
+                        <h2 class="slds-text-heading_large">
+                            , {order.totalPoints} {label.points}
+                        </h2>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+            </lightning-accordion-section>
+
+        </template>
+
+    </lightning-accordion>
+
+    <template lwc:if={isPaginated}>
+
+        <div class="slds-align_absolute-center slds-m-vertical_medium">
+
+            <lightning-button-icon 
+                icon-name="utility:chevronleft" 
+                onclick={handlePrevious} 
+                disabled={isFirstPage}
+                size="large"
+                variant="border-filled"
+                class="slds-m-horizontal_small">
+            </lightning-button-icon>
+
+            <p>
+                {currentPage} {label.of} {totalPages}
+            </p>
+
+            <lightning-button-icon 
+                icon-name="utility:chevronright" 
+                onclick={handleNext} 
+                disabled={isLastPage}
+                size="large"
+                variant="border-filled"
+                class="slds-m-horizontal_small">
+            </lightning-button-icon>
+            
+        </div>
+
+    </template>
+
+    <h5 lwc:if={isHistoryEmpty} class="slds-text-heading_large slds-text-align_center">
+        {label.buyTime}
+    </h5>
+
+</template>
